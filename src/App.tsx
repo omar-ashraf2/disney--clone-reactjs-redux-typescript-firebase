@@ -1,12 +1,20 @@
-import { Fragment } from "react";
 import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
 function App() {
   return (
-    <Fragment>
-      <h2>Hi this TSX App File!</h2>
-      <h2>This will be a Disney+ Clone!</h2>
-    </Fragment>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />}>
+          Login Page
+        </Route>
+        <Route path="/home" element={<Home />}>
+          Home Page
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
