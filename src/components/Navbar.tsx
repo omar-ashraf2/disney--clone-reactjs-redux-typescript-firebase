@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { auth, provider } from "../firebase";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { User, signInWithPopup } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { setSignOutState, setUserLoginDetails } from "../app/userSlice";
 
 const navMenu = [
   {
@@ -40,7 +43,6 @@ const navMenu = [
     page: "/series",
   },
 ];
-
 const Nav = styled.nav`
   position: fixed;
   top: 0;
@@ -134,47 +136,72 @@ const Login = styled.a`
     border-color: transparent;
   }
 `;
+const UserSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+const UserImg = styled.img`
+  width: 40px;
+  height: 100%;
+  max-width: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+const UserName = styled.p`
+  font-size: 14px;
+`;
 
 const Navbar = () => {
+  const dispatch = useAppDispatch();
+  const userName = useAppSelector((state) => state.user.name);
+  const userEmail = useAppSelector((state) => state.user.email);
+  const userPhoto = useAppSelector((state) => state.user.photo);
+  const navigate = useNavigate();
   const handleAuth = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        console.log(token);
-        // The signed-in user info.
         const user = result.user;
-        console.log(user.displayName);
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+        setUser(user);
+        console.log(user);
       })
       .catch((error) => {
         console.log(error);
-
-        // // Handle Errors here.
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        // // The email of the user's account used.
-        // const email = error.customData.email;
-        // // The AuthCredential type that was used.
-        // const credential = GoogleAuthProvider.credentialFromError(error);
       });
+  };
+
+  const setUser = (user: User) => {
+    dispatch(
+      setUserLoginDetails({
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      })
+    );
   };
   return (
     <Nav>
       <Logo>
         <img src="/images/logo.svg" alt="Disney+" />
       </Logo>
-      <NavMenu>
-        {navMenu.map((link) => (
-          <a href={link.page} key={link.id}>
-            <img src={link.img} alt={link.text} />
-            <span>{link.text}</span>
-          </a>
-        ))}
-      </NavMenu>
-      <Login onClick={handleAuth}>Login</Login>
+      {!userName ? (
+        <Login onClick={handleAuth}>Login</Login>
+      ) : (
+        <>
+          <NavMenu>
+            {navMenu.map((link) => (
+              <a href={link.page} key={link.id}>
+                <img src={link.img} alt={link.text} />
+                <span>{link.text}</span>
+              </a>
+            ))}
+          </NavMenu>
+          <UserSection>
+            <UserImg src={`${userPhoto}`} alt={userName} />
+            <UserName>{userName}</UserName>
+          </UserSection>
+        </>
+      )}
     </Nav>
   );
 };
