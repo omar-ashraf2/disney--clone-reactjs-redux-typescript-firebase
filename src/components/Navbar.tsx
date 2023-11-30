@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { auth, provider } from "../firebase";
-import { User, signInWithPopup } from "firebase/auth";
+import { User, signInWithPopup, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setSignOutState, setUserLoginDetails } from "../app/userSlice";
+import { useEffect } from "react";
 
 const navMenu = [
   {
@@ -43,6 +44,84 @@ const navMenu = [
     page: "/series",
   },
 ];
+
+const Navbar = () => {
+  const dispatch = useAppDispatch();
+  const userName = useAppSelector((state) => state.user.name);
+  // const userEmail = useAppSelector((state) => state.user.email);
+  const userPhoto = useAppSelector((state) => state.user.photo);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setUser(user);
+        navigate("/home");
+      }
+    });
+  }, [userName]);
+
+  const handleAuth = () => {
+    if (!userName) {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          setUser(user);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (userName) {
+      signOut(auth)
+        .then(() => {
+          dispatch(setSignOutState());
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  const setUser = (user: User) => {
+    dispatch(
+      setUserLoginDetails({
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      })
+    );
+  };
+  return (
+    <Nav>
+      <Logo>
+        <img src="/images/logo.svg" alt="Disney+" />
+      </Logo>
+      {!userName ? (
+        <Login onClick={handleAuth}>Login</Login>
+      ) : (
+        <>
+          <NavMenu>
+            {navMenu.map((link) => (
+              <a href={link.page} key={link.id}>
+                <img src={link.img} alt={link.text} />
+                <span>{link.text}</span>
+              </a>
+            ))}
+          </NavMenu>
+          <UserSection>
+            <UserImg src={`${userPhoto}`} alt={userName} />
+            <UserName>{userName} &#10148;</UserName>
+            <DropDown>
+              <span onClick={handleAuth}>Sign out</span>
+            </DropDown>
+          </UserSection>
+        </>
+      )}
+    </Nav>
+  );
+};
+
 const Nav = styled.nav`
   position: fixed;
   top: 0;
@@ -136,14 +215,36 @@ const Login = styled.a`
     border-color: transparent;
   }
 `;
+const DropDown = styled.div`
+  position: absolute;
+  top: 59px;
+  background-color: #090b13;
+  border: 1px solid rgba(151, 151, 151, 0.35);
+  border-radius: 8px;
+  box-shadow: rgb(0 0 0 / 50%) 0px 0px 18px 0px;
+  padding: 10px;
+  font-size: 14px;
+  width: 100px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: 5s ease-in-out;
+  display: none;
+`;
 const UserSection = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative;
+  transition: 5s ease-in-out;
+  height: 100%;
+
+  &:hover ${DropDown} {
+    display: block;
+  }
 `;
 const UserImg = styled.img`
-  width: 40px;
-  height: 100%;
+  width: 45px;
+  height: 45px;
   max-width: 100%;
   border-radius: 50%;
   object-fit: cover;
@@ -151,59 +252,4 @@ const UserImg = styled.img`
 const UserName = styled.p`
   font-size: 14px;
 `;
-
-const Navbar = () => {
-  const dispatch = useAppDispatch();
-  const userName = useAppSelector((state) => state.user.name);
-  const userEmail = useAppSelector((state) => state.user.email);
-  const userPhoto = useAppSelector((state) => state.user.photo);
-  const navigate = useNavigate();
-  const handleAuth = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        setUser(user);
-        console.log(user);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const setUser = (user: User) => {
-    dispatch(
-      setUserLoginDetails({
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      })
-    );
-  };
-  return (
-    <Nav>
-      <Logo>
-        <img src="/images/logo.svg" alt="Disney+" />
-      </Logo>
-      {!userName ? (
-        <Login onClick={handleAuth}>Login</Login>
-      ) : (
-        <>
-          <NavMenu>
-            {navMenu.map((link) => (
-              <a href={link.page} key={link.id}>
-                <img src={link.img} alt={link.text} />
-                <span>{link.text}</span>
-              </a>
-            ))}
-          </NavMenu>
-          <UserSection>
-            <UserImg src={`${userPhoto}`} alt={userName} />
-            <UserName>{userName}</UserName>
-          </UserSection>
-        </>
-      )}
-    </Nav>
-  );
-};
-
 export default Navbar;
