@@ -59,6 +59,7 @@ const Navbar = () => {
         navigate("/home");
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userName]);
 
   const handleAuth = () => {
@@ -127,7 +128,7 @@ const Nav = styled.nav`
   top: 0;
   left: 0;
   right: 0;
-  height: 70px;
+  height: 100px;
   background-color: #090b13;
   padding: 0 36px;
   display: flex;
@@ -217,7 +218,7 @@ const Login = styled.a`
 `;
 const DropDown = styled.div`
   position: absolute;
-  top: 59px;
+  top: 97px;
   background-color: #090b13;
   border: 1px solid rgba(151, 151, 151, 0.35);
   border-radius: 8px;
