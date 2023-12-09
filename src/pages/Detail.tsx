@@ -9,7 +9,7 @@ const Detail = () => {
   const [detailData, setDetailData] = useState({});
 
   useEffect(() => {
-    const docRef = doc(db, "movies", "4C7RC3oczt18ph47dBHk");
+    const docRef = doc(db, "movies", id);
     console.log(id);
     getDoc(docRef)
       .then((doc) => {
