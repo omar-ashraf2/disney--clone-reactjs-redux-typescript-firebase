@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import ImgSlider from "../components/ImgSlider";
 import Viewers from "../components/Viewers";
-import Recommends from "../components/Recommends";
-import NewDisney from "../components/NewDisney";
-import Originals from "../components/Originals";
-import Trending from "../components/Trending";
+import Recommends from "../components/movies/Recommends";
+import NewDisney from "../components/movies/NewDisney";
+import Originals from "../components/movies/Originals";
+import Trending from "../components/movies/Trending";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { onSnapshot, collection } from "firebase/firestore";
@@ -12,36 +12,55 @@ import db from "../firebase";
 import { setMovies } from "../app/movieSlice";
 
 type Data = {
-  backgroundImg: string;
-  cardImg: string;
-  description: string;
-  subTitle: string;
-  title: string;
-  titleImg: string;
-  type: string;
+  id?: string;
+  backgroundImg?: string;
+  cardImg?: string;
+  description?: string;
+  subTitle?: string;
+  title?: string;
+  titleImg?: string;
+  type?: string;
 };
 
 const Home = () => {
   const dispatch = useAppDispatch();
   const userName = useAppSelector((state) => state.user.name);
-  let recommends: Data[] = [];
-  let newDisney: Data[] = [];
-  let originals: Data[] = [];
-  let trending: Data[] = [];
 
   useEffect(() => {
+    let recommends: Data[] = [];
+    let newDisney: Data[] = [];
+    let originals: Data[] = [];
+    let trending: Data[] = [];
     onSnapshot(collection(db, "movies"), (snapshot) => {
-      console.log(snapshot);
-
-      // snapshot.docs.map((doc) => switch (doc.data().type) {
-      //   case 'recommend':
-      //     recommends.push({id: doc.id, ...doc.data()})
-      //     break;
-      //   default:
-      //     break;
-      // })
+      snapshot.docs.map((doc) => {
+        switch (doc.data().type) {
+          case "recommend":
+            recommends = [...recommends, { id: doc.id, ...doc.data() }];
+            break;
+          case "new":
+            newDisney = [...newDisney, { id: doc.id, ...doc.data() }];
+            break;
+          case "original":
+            originals = [...originals, { id: doc.id, ...doc.data() }];
+            break;
+          case "trending":
+            trending = [...trending, { id: doc.id, ...doc.data() }];
+            break;
+          default:
+            break;
+        }
+      });
+      dispatch(
+        setMovies({
+          recommend: recommends,
+          newDisney: newDisney,
+          original: originals,
+          trending: trending,
+        })
+      );
     });
-  });
+  }, [dispatch, userName]);
+
   return (
     <Container>
       <ImgSlider />

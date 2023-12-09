@@ -1,40 +1,10 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const Originals = () => {
-  return (
-    <Container>
-      <h4>Originals</h4>
-      <Content>
-        <Wrap>
-          <Link to="/">
-            <img src="/images/slider-scale.jpg" alt="" />
-          </Link>
-        </Wrap>
-        <Wrap>
-          <Link to="/">
-            <img src="/images/slider-scale.jpg" alt="" />
-          </Link>
-        </Wrap>
-        <Wrap>
-          <Link to="/">
-            <img src="/images/slider-scale.jpg" alt="" />
-          </Link>
-        </Wrap>
-        <Wrap>
-          <Link to="/">
-            <img src="/images/slider-scale.jpg" alt="" />
-          </Link>
-        </Wrap>
-      </Content>
-    </Container>
-  );
-};
-
-const Container = styled.div`
+export const Container = styled.div`
   padding: 0 0 26px;
 `;
-const Content = styled.div`
+export const Content = styled.div`
+  margin-top: 20px;
   display: grid;
   grid-gap: 25px;
   gap: 25px;
@@ -43,7 +13,7 @@ const Content = styled.div`
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 `;
-const Wrap = styled.div`
+export const Wrap = styled.div`
   padding-top: 56.25%;
   border-radius: 12px;
   box-shadow: rgb(0 0 0 / 69%) 0px 26px 30px -10px,
@@ -72,5 +42,3 @@ const Wrap = styled.div`
     border-color: rgba(249, 249, 249, 0.8);
   }
 `;
-
-export default Originals;
