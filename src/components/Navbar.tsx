@@ -112,7 +112,7 @@ const Navbar = () => {
           </NavMenu>
           <UserSection>
             <UserImg src={`${userPhoto}`} alt={userName} />
-            <UserName>{userName} &#10148;</UserName>
+            <UserName>{userName}</UserName>
             <DropDown>
               <span onClick={handleAuth} onKeyDown={handleAuth}>
                 Sign out
