@@ -114,7 +114,9 @@ const Navbar = () => {
             <UserImg src={`${userPhoto}`} alt={userName} />
             <UserName>{userName} &#10148;</UserName>
             <DropDown>
-              <span onClick={handleAuth}>Sign out</span>
+              <span onClick={handleAuth} onKeyDown={handleAuth}>
+                Sign out
+              </span>
             </DropDown>
           </UserSection>
         </>
