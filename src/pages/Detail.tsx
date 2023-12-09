@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import db from "../firebase";
 import { collection, doc, getDoc } from "firebase/firestore";
