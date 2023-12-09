@@ -5,8 +5,43 @@ import Recommends from "../components/Recommends";
 import NewDisney from "../components/NewDisney";
 import Originals from "../components/Originals";
 import Trending from "../components/Trending";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { onSnapshot, collection } from "firebase/firestore";
+import db from "../firebase";
+import { setMovies } from "../app/movieSlice";
+
+type Data = {
+  backgroundImg: string;
+  cardImg: string;
+  description: string;
+  subTitle: string;
+  title: string;
+  titleImg: string;
+  type: string;
+};
 
 const Home = () => {
+  const dispatch = useAppDispatch();
+  const userName = useAppSelector((state) => state.user.name);
+  let recommends: Data[] = [];
+  let newDisney: Data[] = [];
+  let originals: Data[] = [];
+  let trending: Data[] = [];
+
+  useEffect(() => {
+    onSnapshot(collection(db, "movies"), (snapshot) => {
+      console.log(snapshot);
+
+      // snapshot.docs.map((doc) => switch (doc.data().type) {
+      //   case 'recommend':
+      //     recommends.push({id: doc.id, ...doc.data()})
+      //     break;
+      //   default:
+      //     break;
+      // })
+    });
+  });
   return (
     <Container>
       <ImgSlider />
