@@ -4,7 +4,8 @@ import { User, signInWithPopup, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setSignOutState, setUserLoginDetails } from "../app/userSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Sling as Hamburger } from "hamburger-react";
 
 const navMenu = [
   {
@@ -46,6 +47,7 @@ const navMenu = [
 ];
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
   const userName = useAppSelector((state) => state.user.name);
   // const userEmail = useAppSelector((state) => state.user.email);
@@ -95,13 +97,16 @@ const Navbar = () => {
   };
   return (
     <Nav>
-      <Logo>
+      <Logo href="/home">
         <img src="/images/logo.svg" alt="Disney+" />
       </Logo>
       {!userName ? (
         <Login onClick={handleAuth}>Login</Login>
       ) : (
         <>
+          <Ham>
+            <Hamburger toggled={isOpen} toggle={setIsOpen} />
+          </Ham>
           <NavMenu>
             {navMenu.map((link) => (
               <a href={link.page} key={link.id}>
@@ -110,6 +115,16 @@ const Navbar = () => {
               </a>
             ))}
           </NavMenu>
+          {isOpen && (
+            <DropDownMenu>
+              {navMenu.map((link) => (
+                <a href={link.page} key={link.id}>
+                  <img src={link.img} alt={link.text} />
+                  <span>{link.text}</span>
+                </a>
+              ))}
+            </DropDownMenu>
+          )}
           <UserSection>
             <UserImg src={`${userPhoto}`} alt={userName} />
             <UserName>{userName}</UserName>
@@ -145,7 +160,15 @@ const Logo = styled.a`
   display: inline-block;
   img {
     display: block;
-    width: 100%;
+    max-width: 100%;
+  }
+`;
+const Ham = styled.div`
+  position: absolute;
+  left: 140px;
+  display: none;
+  @media (max-width: 1040px) {
+    display: block;
   }
 `;
 const NavMenu = styled.div`
@@ -200,8 +223,24 @@ const NavMenu = styled.div`
       }
     }
   }
-  @media (max-width: 768px) {
+  @media (max-width: 1040px) {
     display: none;
+  }
+`;
+const DropDownMenu = styled(NavMenu)`
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 250px;
+  height: auto;
+  padding: 20px;
+  z-index: 100;
+  background-color: #090b13;
+  border-radius: 0 0 8px 8px;
+  transition: all 5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0s;
+  display: block;
+  a {
+    margin: 20px 0;
   }
 `;
 const Login = styled.a`

@@ -1,5 +1,24 @@
 import styled from "styled-components";
 
+const Login = () => {
+  return (
+    <Container>
+      <Content>
+        <CtA>
+          <CTALogoOne src="/images/cta-logo-one.svg" alt="" />
+          <SignUp>GET ALL THERE</SignUp>
+          <Description>
+            Get Premier Access to Raya and the Last Dragon for an additional fee
+            with a Disney+ subscription. As of 03/26/23, the price of Disney+
+            and The Disney Bundle will increase by $1.
+          </Description>
+          <CTALogoTwo src="/images/cta-logo-two.png" alt="" />
+        </CtA>
+        <BgImage />
+      </Content>
+    </Container>
+  );
+};
 const Container = styled.section`
   overflow: hidden;
   display: flex;
@@ -81,25 +100,4 @@ const CTALogoTwo = styled.img`
   vertical-align: bottom;
   width: 100%;
 `;
-
-const Login = () => {
-  return (
-    <Container>
-      <Content>
-        <CtA>
-          <CTALogoOne src="/images/cta-logo-one.svg" alt="" />
-          <SignUp>GET ALL THERE</SignUp>
-          <Description>
-            Get Premier Access to Raya and the Last Dragon for an additional fee
-            with a Disney+ subscription. As of 03/26/23, the price of Disney+
-            and The Disney Bundle will increase by $1.
-          </Description>
-          <CTALogoTwo src="/images/cta-logo-two.png" alt="" />
-        </CtA>
-        <BgImage />
-      </Content>
-    </Container>
-  );
-};
-
 export default Login;
