@@ -32,7 +32,7 @@ const Home = () => {
     let originals: Data[] = [];
     let trending: Data[] = [];
     onSnapshot(collection(db, "movies"), (snapshot) => {
-      snapshot.docs.map((doc) => {
+      snapshot.docs.forEach((doc) => {
         switch (doc.data().type) {
           case "recommend":
             recommends = [...recommends, { id: doc.id, ...doc.data() }];

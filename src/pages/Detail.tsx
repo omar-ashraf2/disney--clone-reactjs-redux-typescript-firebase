@@ -14,11 +14,10 @@ type Details = {
 
 const Detail = () => {
   const { id } = useParams();
-  console.log(id);
   const [detailData, setDetailData] = useState<Details>({});
 
   useEffect(() => {
-    const docRef = doc(db, "movies", id);
+    const docRef = doc(db, "movies/" + id);
     getDoc(docRef)
       .then((doc) => {
         if (doc.exists()) {
@@ -31,19 +30,6 @@ const Detail = () => {
         console.log("Error getting document: " + error);
       });
   }, [id]);
-
-  // useEffect(() => {
-  //   collection(db, "movies")
-  //     .doc(id)
-  //     .get()
-  //     .then((doc) => {
-  //       if (doc.exists()) {
-  //         setDetailData(doc.data());
-  //       } else {
-  //         console.log("No Document");
-  //       }
-  //     });
-  // }, [id]);
 
   return (
     <Container>
