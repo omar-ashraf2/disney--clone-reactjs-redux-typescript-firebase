@@ -78,12 +78,14 @@ const BackGround = styled.div`
   left: 0;
   right: 0;
   top: 100px;
+  width: 100%;
+  object-fit: cover;
   opacity: 0.8;
   z-index: -1;
   img {
     width: 100vw;
     height: 100vh;
-    @media (max-width: 1010px) {
+    @media (max-width: 1300px) {
       width: 100%;
       object-fit: cover;
     }
@@ -103,11 +105,11 @@ const ImageTitle = styled.div`
     max-width: 600px;
     min-width: 200px;
     width: 35vw;
-    @media (max-width: 768px) {
+    @media (max-width: 875px) {
       width: 50vw;
     }
   }
-  @media (max-width: 768px) {
+  @media (max-width: 875px) {
     height: 40vw;
   }
 `;
