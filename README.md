@@ -1,6 +1,5 @@
-# React + TypeScript + Vite
+# React + TypeScript + Vite + Redux + Firebase
 
-Live Demo: https://disneyplus-clone-ts.netlify.app/
+### Demo
 
-Still in progress: 
-![image](https://github.com/omar-ashraf2/disney--clone-reactjs-redux-typescript-firebase/assets/47781859/59c313a6-18e3-4672-8d8d-bc34c3b4ea0e)
+- Live Site URL: [HERE](https://disneyplus-clone-e5.web.app/)
