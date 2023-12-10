@@ -2,15 +2,23 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import db from "../firebase";
-import { collection, doc, getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+
+type Details = {
+  backgroundImg?: string;
+  titleImg?: string;
+  title?: string;
+  subTitle?: string;
+  description?: string;
+};
 
 const Detail = () => {
   const { id } = useParams();
-  const [detailData, setDetailData] = useState({});
+  console.log(id);
+  const [detailData, setDetailData] = useState<Details>({});
 
   useEffect(() => {
     const docRef = doc(db, "movies", id);
-    console.log(id);
     getDoc(docRef)
       .then((doc) => {
         if (doc.exists()) {
